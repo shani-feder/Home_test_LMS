@@ -1,6 +1,6 @@
 <div class="pagination">
-  <button class="btn-secondary" (click)="go(1)" [disabled]="currentPage === 1">ראשון</button>
-  <button class="btn-secondary" (click)="go(currentPage - 1)" [disabled]="!hasPrevious">הקודם</button>
+  <button class="btn-secondary" (click)="go(1)" [disabled]="!hasPrev">ראשון</button>
+  <button class="btn-secondary" (click)="go(currentPage - 1)" [disabled]="!hasPrev">הקודם</button>
 
   @for (p of pages; track p) {
     <button (click)="go(p)" [disabled]="p === currentPage"
@@ -10,7 +10,7 @@
   }
 
   <button class="btn-secondary" (click)="go(currentPage + 1)" [disabled]="!hasNext">הבא</button>
-  <button class="btn-secondary" (click)="go(totalPages)" [disabled]="currentPage === totalPages">אחרון</button>
+  <button class="btn-secondary" (click)="go(totalPages)" [disabled]="!hasNext">אחרון</button>
 
   <span class="page-info">דף {{ currentPage }} מתוך {{ totalPages }}</span>
 </div>

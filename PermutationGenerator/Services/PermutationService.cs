@@ -138,12 +138,13 @@ public class PermutationService
             return new PageResponse
             {
                 Permutations = permutations,
-                PageNumber = pageNumber,
+                PageNumber = (int)(baseOffset / pageSize) + pageNumber,
                 PageSize = pageSize,
                 TotalItems = remainingTotal.ToString("N0"),
                 TotalPages = totalPages.ToString("N0"),
+                TotalPagesRaw = totalPages.ToString(),
                 HasNextPage = startIndex + count < total,
-                HasPreviousPage = pageNumber > 1
+                HasPreviousPage = pageNumber > 1 || baseOffset > 0
             };
         }
         finally

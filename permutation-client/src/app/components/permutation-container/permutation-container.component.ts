@@ -24,10 +24,13 @@ export class PermutationContainerComponent {
     hasMore: true,
     showAllMode: false,
     pageNumber: 1,
-    pageSize: DEFAULT_PAGE_SIZE
+    pageSize: DEFAULT_PAGE_SIZE,
+    fromIndex: 0
   };
 
   page: PageResponse | null = null;
+  totalPages = 1;
+  displayPageNumber = 1;
 
   constructor(private service: PermutationService) {}
 
@@ -61,8 +64,10 @@ export class PermutationContainerComponent {
   onShowAll(): void {
     this.service.getCurrentIndex(this.state.sessionId!).subscribe(res => {
       const fromIndex = parseInt(res.currentIndex);
+      this.state = { ...this.state, fromIndex };
       this.service.getAll(this.state.sessionId!, this.state.pageSize, 1, fromIndex).subscribe(p => {
         this.page = p;
+        this.parseTotalPages(p);
         this.state = { ...this.state, showAllMode: true, pageNumber: 1 };
       });
     });
@@ -70,7 +75,11 @@ export class PermutationContainerComponent {
 
   onPageChanged(page: number): void {
     this.state = { ...this.state, pageNumber: page };
-    this.loadPage(page);
+    this.service.getAll(this.state.sessionId!, this.state.pageSize, page, this.state.fromIndex)
+      .subscribe(p => {
+        this.page = p;
+        this.parseTotalPages(p);
+      });
   }
 
   onBack(): void {
@@ -96,14 +105,14 @@ export class PermutationContainerComponent {
         hasMore: true,
         showAllMode: false,
         pageNumber: 1,
-        pageSize: DEFAULT_PAGE_SIZE
+        pageSize: DEFAULT_PAGE_SIZE,
+        fromIndex: 0
       };
       this.page = null;
     });
   }
 
-  private loadPage(pageNumber: number, fromIndex?: number): void {
-    this.service.getAll(this.state.sessionId!, this.state.pageSize, pageNumber, fromIndex)
-      .subscribe(p => this.page = p);
+  private parseTotalPages(p: PageResponse): void {
+    this.totalPages = parseInt(p.totalPages.replace(/,/g, '')) || 1;
   }
 }

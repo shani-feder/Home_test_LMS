@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { PageResponse } from '../../../models/page.models';
 import { PaginationComponent } from '../pagination/pagination.component';
 
@@ -6,14 +6,14 @@ import { PaginationComponent } from '../pagination/pagination.component';
   selector: 'app-all-permutations',
   standalone: true,
   imports: [PaginationComponent],
-  templateUrl: './all-permutations.component.html'
+  templateUrl: './all-permutations.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AllPermutationsComponent {
-  @Input() page!: PageResponse;
-  @Output() pageChanged = new EventEmitter<number>();
-  @Output() back = new EventEmitter<void>();
+  @Input({ required: true }) page!: PageResponse;
+  @Input({ required: true }) currentPage!: number;
+  @Input({ required: true }) totalPages!: number;
 
-  get totalPagesNumber(): number {
-    return parseInt(this.page.totalPages.replace(/,/g, ''));
-  }
+  @Output() readonly pageChanged = new EventEmitter<number>();
+  @Output() readonly back = new EventEmitter<void>();
 }

@@ -1,3 +1,9 @@
+app-root {
+  width: 100%;
+  max-width: 850px;
+  display: block;
+}
+
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -13,6 +19,7 @@ body {
   display: flex;
   justify-content: center;
   padding: 40px 16px;
+  align-items: flex-start;
 }
 
 .card {
@@ -21,7 +28,7 @@ body {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   padding: 32px;
   width: 100%;
-  max-width: 700px;
+  max-width: 1960px;
   height: fit-content;
 }
 

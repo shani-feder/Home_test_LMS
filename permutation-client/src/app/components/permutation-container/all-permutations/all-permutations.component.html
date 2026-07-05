@@ -15,9 +15,13 @@
     </tbody>
   </table>
 
+  <button type="button" (click)="back.emit()">חזור</button>
+
   <app-pagination
     [currentPage]="page.pageNumber"
-    [totalPages]="totalPagesNumber"
+    [totalPages]="totalPages"
+    [hasNext]="page.hasNextPage"
+    [hasPrev]="page.hasPreviousPage"
     (pageChanged)="pageChanged.emit($event)">
   </app-pagination>
 }

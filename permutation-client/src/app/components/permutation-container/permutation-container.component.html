@@ -18,10 +18,11 @@
     @if (page) {
       <app-all-permutations
         [page]="page"
+        [currentPage]="state.pageNumber"
+        [totalPages]="totalPages"
         (pageChanged)="onPageChanged($event)"
         (back)="onBack()" />
     }
-    <button class="btn-secondary" (click)="onBack()">חזור</button>
   }
 
 </div>

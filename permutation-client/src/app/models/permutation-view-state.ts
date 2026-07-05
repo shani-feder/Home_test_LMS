@@ -8,4 +8,5 @@ export interface PermutationViewState {
   showAllMode: boolean;
   pageNumber: number;
   pageSize: number;
+  fromIndex: number;
 }
