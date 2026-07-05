@@ -1,0 +1,23 @@
+@if (page.permutations.length === 0) {
+  <div class="no-more">אין יותר קומבינציות.</div>
+} @else {
+  <table>
+    <thead>
+      <tr><th>#</th><th>קומבינציה</th></tr>
+    </thead>
+    <tbody>
+      @for (item of page.permutations; track item.index) {
+        <tr>
+          <td>{{ item.index }}</td>
+          <td>[{{ item.permutation.join(', ') }}]</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  <app-pagination
+    [currentPage]="page.pageNumber"
+    [totalPages]="totalPagesNumber"
+    (pageChanged)="pageChanged.emit($event)">
+  </app-pagination>
+}

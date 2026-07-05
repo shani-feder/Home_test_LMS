@@ -4,15 +4,24 @@ namespace PermutationGenerator.Calculators;
 
 public static class PermutationCalculator
 {
-    /// <summary>
-    /// Computes n! (factorial). Supports up to 20! using BigInteger.
-    /// </summary>
+    public const int MaxN = 20;
+
+    private static readonly BigInteger[] _factorials = BuildFactorials();
+
+    private static BigInteger[] BuildFactorials()
+    {
+        var f = new BigInteger[MaxN + 1];
+        f[0] = 1;
+        for (int i = 1; i <= MaxN; i++)
+            f[i] = f[i - 1] * i;
+        return f;
+    }
+
     public static BigInteger Factorial(int n)
     {
-        BigInteger result = 1;
-        for (int i = 2; i <= n; i++)
-            result *= i;
-        return result;
+        if (n < 0 || n > MaxN)
+            throw new ArgumentOutOfRangeException(nameof(n));
+        return _factorials[n];
     }
 
     /// <summary>
@@ -20,6 +29,9 @@ public static class PermutationCalculator
     /// </summary>
     public static int[] GetFirstPermutation(int n)
     {
+        if (n < 1 || n > MaxN)
+            throw new ArgumentOutOfRangeException(nameof(n));
+
         var perm = new int[n];
         for (int i = 0; i < n; i++)
             perm[i] = i + 1;
@@ -33,7 +45,11 @@ public static class PermutationCalculator
     /// </summary>
     public static bool NextPermutation(int[] perm)
     {
+        ArgumentNullException.ThrowIfNull(perm);
+
         int n = perm.Length;
+
+        if (n < 2) return false;
 
         // Step 1: Find largest i such that perm[i] < perm[i+1]
         int i = n - 2;
@@ -60,10 +76,15 @@ public static class PermutationCalculator
 
     /// <summary>
     /// Returns the permutation at a given 0-based index using Factoradic (Lehmer code).
-    /// O(n²) complexity. Supports any index up to n!-1.
+    /// O(n²) complexity - acceptable since n <= 20.
     /// </summary>
     public static int[] GetPermutationByIndex(int n, BigInteger index)
     {
+        if (n < 1 || n > MaxN)
+            throw new ArgumentOutOfRangeException(nameof(n));
+        if (index < 0 || index >= Factorial(n))
+            throw new ArgumentOutOfRangeException(nameof(index));
+
         var result = new int[n];
         var available = new List<int>(n);
 

@@ -1,0 +1,13 @@
+@if (permutation.length > 0) {
+  <div class="permutation-display">
+    קומבינציה מספר {{ index }} &ndash; [{{ permutation.join(', ') }}]
+  </div>
+}
+@if (!hasMore && permutation.length === 0) {
+  <div class="no-more">אין יותר קומבינציות.</div>
+}
+<div class="btn-group">
+  <button (click)="next.emit()" [disabled]="!hasMore && permutation.length === 0">הבא</button>
+  <button class="btn-secondary" (click)="showAll.emit()">כל הקומבינציות</button>
+  <button class="btn-danger" (click)="reset.emit()">איפוס</button>
+</div>

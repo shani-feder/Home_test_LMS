@@ -1,0 +1,27 @@
+<div class="card">
+
+  @if (!state.sessionId) {
+    <app-start-form (start)="onStart($event)" />
+  } @else if (!state.showAllMode) {
+    <app-permutation-summary
+      [n]="state.n"
+      [totalPermutations]="state.totalPermutations" />
+
+    <app-current-permutation
+      [permutation]="state.currentPermutation"
+      [index]="state.currentIndex"
+      [hasMore]="state.hasMore"
+      (next)="onNext()"
+      (showAll)="onShowAll()"
+      (reset)="onReset()" />
+  } @else {
+    @if (page) {
+      <app-all-permutations
+        [page]="page"
+        (pageChanged)="onPageChanged($event)"
+        (back)="onBack()" />
+    }
+    <button class="btn-secondary" (click)="onBack()">חזור</button>
+  }
+
+</div>

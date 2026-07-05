@@ -14,7 +14,7 @@ public class MemoryPermutationStateStore : IPermutationStateStore
 
     public Task SaveAsync(Guid sessionId, GeneratorState state)
     {
-        _store.AddOrUpdate(sessionId, state, (_, _) => state);
+        _store[sessionId] = state;
         return Task.CompletedTask;
     }
 
