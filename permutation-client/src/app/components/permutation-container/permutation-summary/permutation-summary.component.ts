@@ -1,11 +1,12 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-permutation-summary',
   standalone: true,
-  templateUrl: './permutation-summary.component.html'
+  templateUrl: './permutation-summary.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PermutationSummaryComponent {
-  @Input() n!: number;
-  @Input() totalPermutations!: string;
+  @Input({ required: true }) n!: number;
+  @Input({ required: true }) totalPermutations!: string;
 }

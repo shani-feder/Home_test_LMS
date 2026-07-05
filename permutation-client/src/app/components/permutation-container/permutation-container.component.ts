@@ -73,9 +73,11 @@ export class PermutationContainerComponent {
     });
   }
 
-  onPageChanged(page: number): void {
-    this.state = { ...this.state, pageNumber: page };
-    this.service.getAll(this.state.sessionId!, this.state.pageSize, page, this.state.fromIndex)
+  onPageChanged(displayPage: number): void {
+    const pageOffset = Math.floor(this.state.fromIndex / this.state.pageSize);
+    const relativePage = displayPage - pageOffset;
+    this.state = { ...this.state, pageNumber: displayPage };
+    this.service.getAll(this.state.sessionId!, this.state.pageSize, relativePage, this.state.fromIndex)
       .subscribe(p => {
         this.page = p;
         this.parseTotalPages(p);

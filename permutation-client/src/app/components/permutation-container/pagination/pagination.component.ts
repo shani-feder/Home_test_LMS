@@ -1,16 +1,18 @@
-import { Component, Input, Output, EventEmitter, OnChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-pagination',
   standalone: true,
-  templateUrl: './pagination.component.html'
+  templateUrl: './pagination.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PaginationComponent implements OnChanges {
-  @Input() currentPage = 1;
-  @Input() totalPages = 1;
+  @Input({ required: true }) currentPage!: number;
+  @Input({ required: true }) totalPages!: number;
   @Input() hasNext = true;
   @Input() hasPrev = false;
-  @Output() pageChanged = new EventEmitter<number>();
+
+  @Output() readonly pageChanged = new EventEmitter<number>();
 
   pages: number[] = [];
 

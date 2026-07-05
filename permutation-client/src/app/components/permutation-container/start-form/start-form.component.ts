@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MAX_N } from '../../../constants/permutation.constants';
 
@@ -6,10 +6,11 @@ import { MAX_N } from '../../../constants/permutation.constants';
   selector: 'app-start-form',
   standalone: true,
   imports: [FormsModule],
-  templateUrl: './start-form.component.html'
+  templateUrl: './start-form.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StartFormComponent {
-  @Output() start = new EventEmitter<number>();
+  @Output() readonly start = new EventEmitter<number>();
   n: number | null = null;
 
   isValid(): boolean {
