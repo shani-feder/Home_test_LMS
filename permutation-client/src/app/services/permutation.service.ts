@@ -1,17 +1,19 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 import { StartRequest, StartResponse } from '../models/start.models';
 import { NextResponse } from '../models/next.models';
-import { PageResponse } from '../models/page.models';
+import { GetAllRequest, PageResponse } from '../models/page.models';
 
 @Injectable({ providedIn: 'root' })
 export class PermutationService {
-  private readonly baseUrl = 'http://localhost:5151/api/permutations';
+  private readonly baseUrl = `${environment.apiUrl}/permutations`;
 
   constructor(private http: HttpClient) {}
 
   private headers(sessionId: string): HttpHeaders {
+    if (!sessionId) throw new Error('SessionId is required');
     return new HttpHeaders({ 'X-Session-Id': sessionId });
   }
 
@@ -26,18 +28,17 @@ export class PermutationService {
     });
   }
 
-  getAll(sessionId: string, pageSize: number, pageNumber: number, fromIndex?: number): Observable<PageResponse> {
-    const params: any = { pageSize, pageNumber };
-    if (fromIndex !== undefined && fromIndex > 0) params['fromIndex'] = fromIndex;
+  getAll(sessionId: string, request: GetAllRequest): Observable<PageResponse> {
+    let params = new HttpParams()
+      .set('pageSize', request.pageSize)
+      .set('pageNumber', request.pageNumber);
+
+    if (request.fromIndex !== undefined)
+      params = params.set('fromIndex', request.fromIndex);
+
     return this.http.get<PageResponse>(`${this.baseUrl}/all`, {
       headers: this.headers(sessionId),
       params
-    });
-  }
-
-  getCurrent(sessionId: string): Observable<NextResponse> {
-    return this.http.get<NextResponse>(`${this.baseUrl}/current`, {
-      headers: this.headers(sessionId)
     });
   }
 

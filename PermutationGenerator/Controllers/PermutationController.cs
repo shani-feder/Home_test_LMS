@@ -88,26 +88,6 @@ public class PermutationController : ControllerBase
     }
 
     /// <summary>
-    /// Returns the current permutation without advancing - used after returning from all-view.
-    /// </summary>
-    [HttpGet("current")]
-    public async Task<ActionResult<NextResponse>> GetCurrent([FromHeader(Name = "X-Session-Id")] Guid sessionId)
-    {
-        var validationError = ValidateSession(sessionId);
-        if (validationError != null) return validationError;
-
-        try
-        {
-            var response = await _service.GetCurrentAsync(sessionId);
-            return Ok(response);
-        }
-        catch (SessionNotFoundException ex)
-        {
-            return NotFound(ex.Message);
-        }
-    }
-
-    /// <summary>
     /// Returns the current index in the session - used by client to calculate starting page for GetAll.
     /// </summary>
     [HttpGet("current-index")]

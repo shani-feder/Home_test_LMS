@@ -7,6 +7,7 @@ import { StartFormComponent } from './start-form/start-form.component';
 import { PermutationSummaryComponent } from './permutation-summary/permutation-summary.component';
 import { CurrentPermutationComponent } from './current-permutation/current-permutation.component';
 import { AllPermutationsComponent } from './all-permutations/all-permutations.component';
+import { GetAllRequest } from '../../models/page.models';
 
 @Component({
   selector: 'app-permutation-container',
@@ -65,7 +66,7 @@ export class PermutationContainerComponent {
     this.service.getCurrentIndex(this.state.sessionId!).subscribe(res => {
       const fromIndex = parseInt(res.currentIndex);
       this.state = { ...this.state, fromIndex };
-      this.service.getAll(this.state.sessionId!, this.state.pageSize, 1, fromIndex).subscribe(p => {
+      this.service.getAll(this.state.sessionId!, { pageSize: this.state.pageSize, pageNumber: 1, fromIndex }).subscribe(p => {
         this.page = p;
         this.parseTotalPages(p);
         this.state = { ...this.state, showAllMode: true, pageNumber: 1 };
@@ -77,7 +78,7 @@ export class PermutationContainerComponent {
     const pageOffset = Math.floor(this.state.fromIndex / this.state.pageSize);
     const relativePage = displayPage - pageOffset;
     this.state = { ...this.state, pageNumber: displayPage };
-    this.service.getAll(this.state.sessionId!, this.state.pageSize, relativePage, this.state.fromIndex)
+    this.service.getAll(this.state.sessionId!, { pageSize: this.state.pageSize, pageNumber: relativePage, fromIndex: this.state.fromIndex })
       .subscribe(p => {
         this.page = p;
         this.parseTotalPages(p);
@@ -85,15 +86,18 @@ export class PermutationContainerComponent {
   }
 
   onBack(): void {
-    this.service.getCurrent(this.state.sessionId!).subscribe(res => {
+    if (this.page && this.page.permutations.length > 0) {
+      const last = this.page.permutations[this.page.permutations.length - 1];
       this.state = {
         ...this.state,
         showAllMode: false,
-        currentPermutation: res.permutation ?? [],
-        currentIndex: res.index ?? '',
-        hasMore: res.hasMore
+        currentPermutation: last.permutation,
+        currentIndex: last.index,
+        hasMore: true
       };
-    });
+    } else {
+      this.state = { ...this.state, showAllMode: false };
+    }
   }
 
   onReset(): void {

@@ -16,11 +16,20 @@ export class PaginationComponent implements OnChanges {
 
   pages: number[] = [];
 
+  private static readonly PAGE_WINDOW = 5;
+
   ngOnChanges(): void {
-    const delta = 2;
-    const start = Math.max(1, this.currentPage - delta);
-    const end = Math.min(this.totalPages, this.currentPage + delta);
-    this.pages = Array.from({ length: end - start + 1 }, (_, i) => start + i);
+    this.pages = this.buildPages();
+  }
+
+  private buildPages(): number[] {
+    const window = PaginationComponent.PAGE_WINDOW;
+
+    let start = Math.max(1, this.currentPage - 2);
+    let end = Math.min(this.totalPages, start + window - 1);
+    start = Math.max(1, end - window + 1);
+
+    return Array.from({ length: end - start + 1 }, (_, i) => start + i);
   }
 
   go(page: number): void {

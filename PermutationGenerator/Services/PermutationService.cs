@@ -153,22 +153,6 @@ public class PermutationService
         }
     }
 
-    public async Task<NextResponse> GetCurrentAsync(Guid sessionId)
-    {
-        var state = await _stateStore.GetAsync(sessionId)
-            ?? throw new SessionNotFoundException(sessionId);
-
-        if (state.CurrentPermutation.Length == 0)
-            return new NextResponse { Permutation = Array.Empty<int>(), Index = "0", HasMore = true };
-
-        return new NextResponse
-        {
-            Permutation = state.CurrentPermutation.ToArray(),
-            Index = state.CurrentIndex.ToString(),
-            HasMore = state.CurrentIndex < state.TotalPermutations
-        };
-    }
-
     public async Task<BigInteger> GetCurrentIndexAsync(Guid sessionId)
     {
         var state = await _stateStore.GetAsync(sessionId)
